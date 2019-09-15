@@ -1,0 +1,131 @@
+\section*{Problem 2}
+
+\subsection*{Claim}
+
+C = BPP
+
+
+\subsection*{Proof}
+
+By proofing C $\subseteq$ BPP and BPP $\subseteq$ C.
+
+\subsubsection*{BPP $\subseteq$ C}
+
+Let $L \in$ BPP be arbitrary.
+
+By definition of BPP: There exists a poly-time algorithm A which on any input $x$ has the following behavior:
+
+\begin{itemize}
+    \item If $x \in L$, then $\operatorname{Pr}[\textit{A accepts } x] \geq \frac{3}{4}$
+    
+    \item If $x \notin L$, then $\operatorname{Pr}[\textit{A rejects } x] \geq \frac{3}{4}$
+\end{itemize}
+
+A is also a valid algorithm for C, since A fulfills the definition of C:
+
+Let $\operatorname{poly}(n) = 4$:
+
+\begin{itemize}
+    \item If $x \in L$, then $\operatorname{Pr}[\textit{A accepts } x] \geq \frac{3}{4} = \frac{1}{2} + \frac{1}{4} = \frac{1}{2} + \frac{1}{\operatorname{poly}(n)}$
+    
+    \item If $x \notin L$, then $\operatorname{Pr}[\textit{A rejects } x] \geq \frac{3}{4} \geq \frac{1}{2}$
+\end{itemize}
+
+\subsubsection*{C $\subseteq$ BPP}
+
+Let $L \in$ C be arbitrary.
+
+By definition of C: There exists a poly-time algorithm A which on any input $x$ has the following behavior:
+
+\begin{itemize}
+    \item If $x \in L$, then $\operatorname{Pr}[\textit{A accepts } x] \geq \frac{1}{2} + \frac{1}{\operatorname{poly}(n)}$
+    
+    \item If $x \notin L$, then $\operatorname{Pr}[\textit{A rejects } x] \geq \frac{1}{2}$
+\end{itemize}
+
+Let B be an algorithm defined as follows:
+
+\begin{itemize}
+    \item Repeat algorithm A $k$ times. Accept, if at least $l = \frac{k}{2} + \frac{k}{2 \operatorname{poly}(n)}$ of executions of A accepted, otherwise reject.
+\end{itemize}
+
+Where $k = 16\operatorname{poly}(n)\operatorname{log}(2)$
+
+\underline{Claim}
+
+B is a valid algorithm for BPP, i.e. B has the following properties:
+
+\begin{itemize}
+    \item If $x \in L$, then $\operatorname{Pr}[\textit{B accepts } x] \geq \frac{3}{4}$
+    
+    \item If $x \notin L$, then $\operatorname{Pr}[\textit{B rejects } x] \geq \frac{3}{4}$
+\end{itemize}
+
+\underline{Proof}
+
+\begin{itemize}
+    \item Assume $x \in L$:
+
+Let $X_i$ be a 0/1 random variable, that indicates if the $i$-th execution of A accepted.
+
+Let $X = \sum\limits_{i=1}^k X_i$,
+$E[X] = k \cdot \left( \frac{1}{2} + \frac{1}{\operatorname{poly}(n)} \right) = \frac{k}{2} + \frac{k}{\operatorname{poly}(n)}$
+
+$\operatorname{Pr}[\textit{B accepts } x] 
+= \operatorname{Pr}[\textit{A accepts } x \textit{ at least l times}]
+= \operatorname{Pr}[X \geq l] 
+= 1 - \operatorname{Pr}[X < l]
+= 1 - \operatorname{Pr}[X \leq l]$
+
+$X$ consists of independent 0/1 random variables, thus Chernoff bounds with additive error can be applied:
+
+$\operatorname{Pr}[X \leq l]= \operatorname{Pr}\left[X \leq  \frac{k}{2} + \frac{k}{2 \operatorname{poly}(n)}\right]
+= \operatorname{Pr}\left[X \leq  \left(\frac{k}{2} + \frac{k}{\operatorname{poly}(n)}\right) - k\cdot\frac{1}{2\operatorname{poly}(n)}\right]
+\leq e^{-\frac{\frac{1}{2\operatorname{poly}(n)} k}{2}}
+$
+
+$=
+e^{-\frac{\frac{1}{2\operatorname{poly}(n)} 16\operatorname{poly}(n)\operatorname{log}(2)}{2}} 
+=
+e^{-\operatorname{log}(8)}
+= \frac{1}{8} \leq \frac{1}{4}$
+
+$\Rightarrow
+\operatorname{Pr}[\textit{B accepts } x] \geq \frac{3}{4}$ 
+
+\item Assume $x \notin L$:
+
+Let $Y_i$ be a 0/1 random variable, that indicates if the $i$-th execution of A accepts.
+
+Let $Y = \sum\limits_{i=1}^k Y_i$,
+$E[Y] = k \cdot\frac{1}{2} = \frac{k}{2}$
+
+$\operatorname{Pr}[\textit{B rejects } x] 
+= \operatorname{Pr}[\textit{A accepts } x \textit{ less than l times}]
+= \operatorname{Pr}[Y < l] 
+= 1 - \operatorname{Pr}[Y \geq l]$
+
+Applying Chernoff:
+
+$\operatorname{Pr}[Y \geq l]
+= \operatorname{Pr}\left[Y \geq \frac{k}{2} + \frac{k}{2 \operatorname{poly}(n)}\right]
+= \operatorname{Pr}\left[Y \geq \frac{k}{2} + k\cdot\frac{1}{2\operatorname{poly}(n)}\right]
+\leq e^{-\frac{\frac{1}{2\operatorname{poly}(n)} k}{4}}$
+
+$=
+e^{-\frac{\frac{1}{2\operatorname{poly}(n)} 16\operatorname{poly}(n)\operatorname{log}(2)}{4}} 
+=
+e^{-\operatorname{log}(4)}
+= \frac{1}{4}$
+
+$\Rightarrow
+\operatorname{Pr}[\textit{B rejects } x] \geq \frac{3}{4}$ 
+
+\end{itemize}
+
+Since A is a polynomial-time algorithm and A is executed $16\operatorname{poly}(n)\operatorname{log}(2)$ times, B is a polynomial-time algorithm.
+
+Thus, B is a valid algorithm for BPP.
+
+\pagebreak
+

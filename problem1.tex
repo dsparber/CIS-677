@@ -1,0 +1,111 @@
+\section*{Problem 1}
+
+\subsection*{Input}
+
+Matrix $M \in \mathbb{R}^{n \times n}$
+
+\subsection*{Output}
+
+Return \texttt{true} if $M$ is a diagonal matrix, \texttt{false} otherwise.
+
+\subsection*{Algorithm}
+
+\underline{Algorithm A}
+
+\begin{enumerate}
+    \item Pick $v \in \{0,1\}^n$ uniformly at random.
+    \item Calculate $x = Mv$
+    \item Calculate $y = Mu$, where $u = [1,\cdots,1]^T$
+    \item Return \texttt{true} if $\forall i \in \{1,\dots,n\}: y_i \cdot v_i = x_i$, otherwise \texttt{false}
+\end{enumerate}
+
+\underline{Algorithm B}
+
+Repeat Algorithm A $\operatorname{log} n$ times. If A always outputs \texttt{true}, return \texttt{true}, otherwise return \texttt{false}.
+
+\subsection*{Analysis}
+
+\subsubsection*{Runtime}
+
+Algorithm A performs exactly 2 matrix-vector query. Algorithm B calls A $\operatorname{log} n$ times. Thus, algorithm B queries $\bigO(\operatorname{log} n)$ vector-matrix products.
+
+\subsubsection*{Correctness}
+
+Let $M  \in \mathbb{R}^{n \times n}$ be arbitrary.
+
+\textbf{Case 1:} $M$ is diagonal
+
+\underline{Claim} 
+
+Algorithm B accepts
+
+\underline{Proof}
+
+\textit{Lemma 1:} Given $M$ is diagonal, algorithm A always returns \texttt{true}.
+
+Let $v \in \{1,\dots,n\}^n$ be arbitrary, $M$ is diagonal.
+
+$d_i$, $i \in \{1,\dots,n\}$ denotes the $i$-th diagonal element of $M$.
+
+$x = Mv = [d_1 v_1,\dots, d_n v_n]^T$
+
+$y = Mu = [d_1,\dots,d_n]^T$
+
+$\forall i \in \{1,\dots,n\}$: $y_i \cdot v_i = d_i \cdot v_i = x_i$. Thus, the algorithm A returns \texttt{True}.
+
+\textit{Using lemma 1:}
+
+A always returns \texttt{true}. Thus, B returns \texttt{true}.
+
+\textbf{Case 2:} $M$ is not diagonal
+
+\underline{Claim} 
+
+Algorithm B rejects with probability at least $1 - \frac{1}{n}$, i.e. $\operatorname{Pr}[\textit{B error}] \leq \frac{1}{n}$
+
+\underline{Proof}
+
+\textit{Lemma 2:} Given M is not diagonal, algorithm A rejects with probability at least $\frac{1}{2}$, i.e. $\operatorname{Pr}[\textit{A error}] \leq \frac{1}{2}$
+
+Let $v \in \{1,\dots,n\}^n$ be arbitrary, $M$ is not diagonal.
+
+Since $M$ is not diagonal, $m_{i,j} \neq 0$ for some, $i,j \in \{1,\dots,n\}$ where $i \neq j$
+
+$\operatorname{Pr}[\textit{A error}] \leq
+\operatorname{Pr}][\textit{Error in line i}] =
+\operatorname{Pr}[y_i \cdot v_i = x_i] = 
+\operatorname{Pr}[y_i \cdot v_i - x_i = 0]$
+
+$x_i = m_{i,j} \cdot v_j + \sum_{k \in \{1,\cdots,n\} k \neq j} m_{i,k}\cdot v_k$
+
+$y_i \cdot v_i = m_{i,j} \cdot v_i + \sum_{k \in \{1,\cdots,n\} k \neq j} m_{i,k}\cdot v_i$
+
+$y_i\cdot v_i - x_i =  m_{i,j} \cdot v_i - m_{i,j} \cdot v_j + S$, where $S = \sum_{k \in \{1,\cdots,n\} k \neq j} m_{i,k}\cdot (v_i - v_k)$
+
+\begin{itemize}
+    \item Case $S = 0$:
+
+    $\operatorname{Pr}[\textit{A error}] \leq  
+    \operatorname{Pr}[m_{i,j} \cdot v_i - m_{i,j} \cdot v_j = 0] =
+    \operatorname{Pr}[v_i = v_j] =
+    \frac{1}{2}$
+
+    \item Case $S \neq 0$:
+
+    $\operatorname{Pr}[\textit{A error}] \leq  
+    \operatorname{Pr}[m_{i,j} \cdot v_i - m_{i,j} \cdot v_j + S = 0] \leq
+    \operatorname{Pr}[v_i \neq v_j] =
+    \frac{1}{2}$
+    
+\end{itemize}
+
+
+
+
+\textit{Using lemma 2:}
+
+$\operatorname{Pr}[\textit{B error}] =
+(\operatorname{Pr}[\textit{A error}])^{\operatorname{log} n} \leq \frac{1}{2}^{\operatorname{log} n} = 
+\frac{1}{n}$ 
+
+\pagebreak

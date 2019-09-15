@@ -1,0 +1,55 @@
+\section*{Problem 5}
+
+\subsection*{Input}
+
+Array $A[1..n]$ of $n$ distinct integers, parameter $\epsilon$.
+
+\subsection*{Output}
+
+If $A$ is sorted, returns YES.
+
+If $A$ is $\epsilon$-far from being sorted, returns NO with probability at least $3/4$.
+
+Otherwise return either YES or NO.
+
+\subsection*{Algorithm}
+
+
+\begin{enumerate}
+    \item Repeat k times:
+
+\begin{itemize}
+    \item Pick $x \in A$ uniformly at random
+    \item Search for $x$ with binary search.
+    \item If search failed: return NO
+\end{itemize}
+
+\item Return YES
+\end{enumerate}
+
+Where $k = $ \textbf{TODO}
+
+
+\subsection*{Run time}
+
+Binary search on an array with length $n$ has run time $\bigO(\log n)$. Thus, picking $x$ and checking whether the search failed can be done in $\bigO(1)$.
+Thus one repetition runs in $\bigO(\log n)$.
+
+Repeting $k = $ \textbf{TODO} times leads to a total run time of $\bigO\left(\frac{\log n}\epsilon{}\right)$.
+
+\subsection*{Correctness}
+
+\begin{itemize}
+    \item Case 1: $A$ is sorted
+    
+    Finding $x \in A$ with binary search is always successful when $A$ is sorted. Thus the algorithm outputs YES. 
+    
+    \item Case 2: $A$ is $\epsilon$-far from being sorted
+    
+    \textbf{TODO}
+    
+    \item Case 3: $A$ is neither sorted nor $\epsilon$ far from being sorted
+    
+    The algorithm terminates on every input. YES and NO are the only possible outputs. 
+    Thus, the algorithm always outputs either YES or NO.
+\end{itemize}

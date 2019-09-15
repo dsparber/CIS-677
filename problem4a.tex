@@ -1,0 +1,73 @@
+\subsection*{Part a - Deterministic algorithm}
+
+\subsubsection*{Input}
+
+$V \in \mathbb{R}_{_{\geq 0}}^n$, with at least one non-zero element.
+
+\subsubsection*{Output}
+
+Returns unique index $i$ such that $V[i] \neq 0$ whenever $V$ contains exactly one non-zero element. Otherwise outputs ``More than one non-zero entry''.
+
+\subsubsection*{Algorithm}
+
+
+\begin{enumerate}
+    \item $a = 0$
+
+    \item For $k \in \{0,\dots, \lceil \log n \rceil\}$:
+
+    \begin{itemize}
+        \item $S_k := \{s ~ | ~ s \in U \text{ if } s_k = 0 \}$
+                
+        \item if $Q(S_k) \neq 0$ and $Q(U \setminus S_k) \neq 0$: return ``More than one non-zero entry''
+        
+        \item $a_k = 1$ if $Q(S_k) \neq 0$ else $0$
+        
+    \end{itemize}
+    
+    \item return $a$
+\end{enumerate}
+
+
+\subsubsection*{Run time}
+
+Run time in terms of summation queries:
+
+Every iteration performs $\bigO(1)$ queries. There is a total number of $\lceil \log n \rceil$ iterations.
+
+Thus, the algorithm performs $\bigO(\log n)$ summation queries.
+
+\subsubsection*{Correctness}
+
+\begin{itemize}
+    \item Case 1: More than one non-zero entry
+    
+    There exists $i, j \in U$ with $i \neq j$, $V[i] > 0$ and $V[j] > 0$.
+    
+    Since $i \neq j$, there exists at least one index $k$ with $i_k \neq j_k$.
+    
+    Thus, only $i$ or $j$ is in $S_k$. Therefore, $Q(S_k) > 0$ and $Q(U \setminus S_k) > 0$
+    
+    The algorithm always outputs ``More than one non-zero entry''
+
+    
+    \item Case 2: Exactly on non-zero entry
+    
+    There exists a unique $b$ with $V[b] > 0$
+    
+    For every $k \in \{0,\dots, \lceil \log n \rceil\}$:
+    
+    \begin{itemize}
+        \item Case $b_k = 0$: $b \notin S_k$, since $V[b]$ is the only non-zero element: $Q(S_k) = 0 \Rightarrow a_k = 0$
+    
+        \item Case $b_k = 1$: $b \in S_k \Rightarrow Q(S_k) = V[b] > 0 \Rightarrow a_k = 1$,
+        
+        \item Therefore $b_k = a_k$
+
+    \end{itemize}
+    
+    $\Rightarrow a = b$
+    
+    Since $b$ is unique, the algorithm returns the only correct index.
+    
+\end{itemize}

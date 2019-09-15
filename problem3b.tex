@@ -1,0 +1,87 @@
+\subsection*{Part b - Randomized algorithm}
+
+\subsubsection*{Claim}
+
+The expected number of the leaves queried by the algorithm on any instance is at most $n^{0.9}$.
+
+\subsection*{Proof}
+
+Let $T$ be arbitrary, let $h \geq 1$ be arbitrary. Assume $h$ is the height of tree $T$.
+
+Let $X_h$ be the number of leaves queried by the algorithm for the tree T with height $h \geq 1$.
+
+Let $p_a$ be the probability, that two values chosen uniformly at random have the same value.
+
+Two sub trees need to be evaluated. If the values disagree, the third sub tree needs to be evaluated. 
+
+The cost of evaluating a leaf is 1. The cost of evaluating an inner node $v$ is equal to evaluating the sub tree with root $v$. Thus evaluating a tree with height $h - 1$.
+
+Therefore, he expected value can be defined recursively as following:
+
+$\EV[X_1] = 
+p_a \cdot 2 \cdot 1 + (1 - p_a) \cdot 3 \cdot 1 =
+(3 - p_a)$
+
+$\EV[X_h] = 
+p_a \cdot 2 \cdot \EV[X_{h - 1}] + (1 - p_a) \cdot 3 \cdot \EV[X_{h - 1}] =
+(3 - p_a) \cdot \EV[X_{h-1}]
+$
+
+Any inner node of T has either three children with the same value or two children with one value and one child with the other value.
+
+\begin{itemize}
+    \item Case 1: Node has different child values
+    
+    To get two agreeing values, the first and the second child need to have the same value, i.e.:
+    
+    $p_a = \frac{2}{3} \cdot \frac{1}{2} = \frac{1}{3}$
+    
+    \item Case 2: Node has same child values
+    
+    No matter which two children are chosen, the value always agrees, thus: 
+    
+    $p_a = 1$
+    
+\end{itemize}
+
+Thus $p_a \geq \frac{1}{3}$, and therefore:
+
+$\EV[X_1] \leq
+(3 - \frac{1}{3}) = \frac{8}{3}$
+
+$\EV[X_h] \leq 
+(3 - \frac{1}{3}) \cdot \EV[X_{h-1}] = 
+\frac{8}{3} \cdot \EV[X_{h-1}]$
+
+\textit{Lemma:}
+$\forall h \geq 1: \EV[X_h] \leq \left(\frac{8}{3}\right)^h$
+
+Proof by induction over $h$.
+
+Induction hypothesis IH: $\EV[X_h] \leq \left(\frac{8}{3}\right)^h$
+
+Let $h \geq 1$ be arbitrary.
+
+\begin{itemize}
+    \item Case $h = 1$:
+    
+    $\EV[X_1] \leq \frac{8}{3} = \left(\frac{8}{3}\right)^1$
+    
+    \item Case $h \geq 1$:
+    
+    $\EV[X_h] \leq 
+    \frac{8}{3} \cdot \EV[X_{h-1}] = 
+    \frac{8}{3} \cdot \left(\frac{8}{3}\right)^{h-1} = 
+    \left(\frac{8}{3}\right)^h$
+    
+\end{itemize}
+
+Thus, IH holds.
+
+By applying \textit{Lemma}:
+
+$\EV[X_h] \leq 
+\left(\frac{8}{3}\right)^h \leq
+(3^{0.9})^h =
+(3^h)^{0.9} = 
+n^{0.9}$
