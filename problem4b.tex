@@ -10,21 +10,115 @@ Returns an index $i$ with $V[i] \neq 0$ with probability of at least $1 - \delta
 
 \subsubsection*{Algorithm}
 
-\underline{Algorithm A}
+If d = 1: run deterministic algorithm on $V$
 
-\textbf{TODO}
+Otherwise:
+\begin{itemize}
+    \item Repeat $k$ times:
+    \begin{enumerate}
+        \item For $i \in [1..n]$: Draw $x_i \in \{0, 1\}$ with $\Pr[x_i = 1] = \frac{1}{d}$ 
+        
+        \item Let $W = [V[0]\cdot x_0,\dots,V[n] \cdot x_n ]^T$
+        
+        \item If $Q_W([1..n]) \neq 0$:
+                
+        \begin{itemize}
+            \item Run deterministic algorithm on $W$
+            
+            \item If index is returned by deterministic algorithm: return index
+            
+        \end{itemize}
+        
+    \end{enumerate} 
+    
+    \item return $0$
+\end{itemize} 
 
-\underline{Algorithm B}
-
-Run algorithm $A$ $k$ times. \textbf{TODO}
-
-Where $k = $ \textbf{TODO}
+Where $k = 9 \cdot \log(1/\delta)$ and $Q_W(S) = \sum_{j \in S} W[j]$ is the summation query over vector $W$
 
 \subsubsection*{Run time}
 
-One Iteration of Algorithm A performs $1$ summation query. The total number of iterations is \textbf{TODO}.
-Resulting in $\bigO(\log n)$ summation queries. 
+If $d = 1$, the algorithm runs in $\bigO(\log n)$.
 
-Algorithm B runs A $k = $ \textbf{TODO} times, thus B performs $\bigO(\log(n)\cdot\log(1/\delta))$ summation queries.
+Otherwise, one iteration of the algorithm performs one summation query plus at most $\bigO(\log n)$ summation queries by calling the deterministic algorithm.
+
+Thus, one iteration performs $\bigO(\log n)$ summation queries.
+
+By repeating $k \in \bigO(\log(1/\delta))$ times, the total number of summation queries is in  $\bigO(\log(n)\cdot\log(1/\delta))$.
 
 \subsubsection*{Correctness}
+
+\begin{itemize}
+    \item Case $d = 1$:
+    
+    The algorithm executes the deterministic algorithm. All necessary input conditions are met.
+
+    Thus, correctness follows from correctness of deterministic algorithm. The probability of returning the correct index is $1$ and therefore at least $1 - \delta$.
+    
+    
+    \item Case $d \neq 1$
+    
+    \underline{Analyzing one iteration:}
+    
+    \textit{Claim:} $W$ contains exactly one non-zero element with probability $p \geq \frac{1}{4}$
+    
+    \textit{Proof:} 
+    
+    Every index with a zero element in $V$ is also an index with a zero element in $W$ by construction of $W$.
+    
+    Therefore, only non-zero elements of $V$ might remain in $W$. By construction, each of the $d$ non-zero element remains in $W$ with probability $\frac{1}{d}$. Let $X$ be the amount of non-zero elements remaining in $W$.
+    
+    $X \sim \operatorname{Binomial}\left(d, \frac{1}{d}\right)$
+    
+    $\Pr[X = 1] = 
+    {d \choose 1} \cdot \frac{1}{d} \cdot \left(1 - \frac{1}{d}\right)^{d-1} = 
+    \left(1 - \frac{1}{d}\right)^{d-1} =
+    \frac{\left(1 - \frac{1}{d}\right)^{d} }{1 - \frac{1}{d}} \geq
+    \frac{\left(1 - \frac{1}{d}\right)^{d} }{1 - 0} = 
+    \left(1 - \frac{1}{d}\right)^{d} 
+    $ 
+    
+    Since $d \in [1..n]$ and $d \neq 1$: $d \geq 2$ 
+
+    For $d = 2$: $\left(1 - \frac{1}{d}\right)^{d} = \frac{1}{4}$
+        
+    The term $\left(1 - \frac{1}{d}\right)^{d}$ is monotonically increasing as $d$ increases (see calculus).  
+    
+    Thus, $\left(1 - \frac{1}{d}\right)^{d} \geq \frac{1}{4}$
+    
+    $\Rightarrow \Pr[X = 1] \geq \frac{1}{4}$
+    
+    \textit{q.e.d}
+    
+    The if condition ensures, that $W$ contains at least one non-zero element.
+    
+    Therefore, the input conditions for the deterministic algorithm are met. 
+    
+    Whenever $W$ contains exactly one non-zero element, the correct index of that element is returned by the deterministic algorithm. Otherwise, a string is returned.
+    
+    By construction of $W$, this index is also a valid non-zero index in the original vector. Hence, the entire algorithm succeeds and returns a valid index.
+    
+    The probability of $W$ containing exactly one non-zero element is $p \geq \frac{1}{4}$. Thus, one iteration succeeds with $p \geq \frac{1}{4}$.
+    
+    \underline{After $k$ iterations}
+    
+    The algorithm returns a correct element whenever one iteration returns.
+    
+    The algorithm can only fail, if no valid index was found within $k$ iterations, i.e. if every iteration fails.
+    
+    $\Rightarrow \Pr[\textit{error}] \leq 
+    (1 - p)^k \leq 
+    \left(1 - \frac{1}{4}\right)^k = 
+    \left(\frac{3}{4}\right)^k = 
+    e^{k \cdot \log(3/4)} = $
+    
+    $ = e^{9 \cdot \log(1/\delta) \cdot \log(3/4)} \leq
+    e^{\frac{- 1}{\log(3/4)} \cdot \log(1/\delta) \cdot \log(3/4)} = 
+    e^{-\log(1/\delta)} = 
+    e^{\log \delta} =
+    \delta$
+    
+    $\Rightarrow \Pr[\textit{success}] = 1 - \Pr[\textit{error}] \geq 1 - \delta$
+    
+\end{itemize}
+
