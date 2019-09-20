@@ -43,7 +43,7 @@ Algorithm B accepts
 
 \textit{Lemma 1:} Given $M$ is diagonal, algorithm A always returns \texttt{true}.
 
-Let $v \in \{1,\dots,n\}^n$ be arbitrary, $M$ is diagonal.
+Let $v \in \{0,1\}^n$ be arbitrary, $M$ is diagonal.
 
 $d_i$, $i \in \{1,\dots,n\}$ denotes the $i$-th diagonal element of $M$.
 
@@ -67,7 +67,7 @@ Algorithm B rejects with probability at least $1 - \frac{1}{n}$, i.e. $\operator
 
 \textit{Lemma 2:} Given M is not diagonal, algorithm A rejects with probability at least $\frac{1}{2}$, i.e. $\operatorname{Pr}[\textit{A error}] \leq \frac{1}{2}$
 
-Let $v \in \{1,\dots,n\}^n$ be arbitrary, $M$ is not diagonal.
+Let $v \in \{0,1\}^n$ be arbitrary, $M$ is not diagonal.
 
 Since $M$ is not diagonal, $m_{i,j} \neq 0$ for some, $i,j \in \{1,\dots,n\}$ where $i \neq j$
 

@@ -27,7 +27,7 @@ Otherwise return either YES or NO.
 \item Return YES
 \end{enumerate}
 
-Where $k = $ \textbf{TODO}
+Where $k = \frac{2}{\epsilon}$ 
 
 
 \subsection*{Run time}
@@ -35,7 +35,7 @@ Where $k = $ \textbf{TODO}
 Binary search on an array with length $n$ has run time $\bigO(\log n)$. Thus, picking $x$ and checking whether the search failed can be done in $\bigO(1)$.
 Thus one repetition runs in $\bigO(\log n)$.
 
-Repeting $k = $ \textbf{TODO} times leads to a total run time of $\bigO\left(\frac{\log n}\epsilon{}\right)$.
+Repeting $k = \frac{2}{\epsilon}$ times leads to a total run time of $\bigO\left(\frac{\log n}\epsilon{}\right)$.
 
 \subsection*{Correctness}
 
@@ -46,7 +46,41 @@ Repeting $k = $ \textbf{TODO} times leads to a total run time of $\bigO\left(\fr
     
     \item Case 2: $A$ is $\epsilon$-far from being sorted
     
-    \textbf{TODO}
+    \textit{To show:}  Algorithm returns NO with probability at least 3/4. 
+    
+    \underline{Analyzing one run of the loop body:}
+        
+    Lets $s_1, s_2,\dots,s_m$ be all the elements in $A$ that can be found by binary search.
+    
+    \textit{Claim:} $\forall i,j \in \{1,\dots,m\} : i < j \Rightarrow s_i < s_j$
+    
+    \textit{Proof:} Assume  $i < j$.
+    
+    By the way binary search works: There must exist an index $l$ where the binary search diverged. I.e. $\exists l : i < l$ and $l \leq j$.
+    Since the search diverged at $l$: $s_i < s_l$ and $s_l \leq s_j$. By transitivity: $s_i < s_j$.
+    
+    Thus, $s_1, s_2,\dots,s_m$ is a sorted sequence. The longest sorted sequence has length $(1 - \epsilon) \cdot n$. Therefore: $m \leq (1 - \epsilon) \cdot n$.
+    
+    Drawing $x \in A$ uniformly at random: $x$ can only be found if $x = s_i$ for some $i \in \{1,\dots,m\}$.
+    
+    Therefore, the probability $p$ of drawing a $x$ which can be found is at most $ \frac{m}{n} = \frac{(1 - \epsilon) \cdot n}{n} = 1 - \epsilon$ 
+    
+     $\Rightarrow p \leq (1 - \epsilon)$
+    
+    \underline{Repeating the body of the loop $k$ times:}
+    
+    $\Pr[\textit{YES}] 
+    = p^k 
+    = (1 - \epsilon)^{k} 
+    \leq e^{-\epsilon \cdot k}
+    = e^{-\epsilon \cdot \frac{2}{\epsilon}}
+    = e^{-2}
+    = e^{\log\left(\frac{1}{4}\right)}
+    = \frac{1}{4}$
+    
+    $\Pr[\textit{NO}] = 1 - \Pr[\textit{YES}] \geq 1 - \frac{1}{4} = \frac{3}{4}$
+    
+    Therefore, the algorithm yields NO with probability at least 3/4.
     
     \item Case 3: $A$ is neither sorted nor $\epsilon$ far from being sorted
     
