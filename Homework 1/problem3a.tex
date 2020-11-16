@@ -1,0 +1,42 @@
+\subsection*{Part a - Deterministic algorithm}
+
+\subsubsection*{To show}
+
+For any deterministic algorithm and $h \geq 1$, there is an instance that forces the algorithm to query all $n = 3^h$ leaves in order to compute the value of the root.
+
+\subsubsection*{Proof}
+
+Proof by induction over $h$.
+
+\underline{Induction hypothesis (IH):} 
+For any deterministic algorithm $A$ and $h \geq 1$: If the algorithm only looks at $n-1$ leaves, there exist two trees $T_1$ and $T_2$ with different roots for which the $A$ computes the same root value.
+
+Let $A$ be an arbitrary deterministic algorithm that computes the root of a given tree.
+
+\underline{Case $h = 1$}
+
+Let $T_1$ be a tree with the leaves $v_1, v_2, v_3$, and $T_2$ a tree with the leaves $u_1, u_2, u_3$.
+
+Assume $A$ looks only at $n - 1 = 2$ leaves. Let $v_1, v_2$ respectively $u_1, u_2$ be the values $A$ looks at. 
+
+For $v_1 = \texttt{True}, v_2 = \texttt{False}, v_3 = \texttt{False}$ and $u_1 = \texttt{True}, u_2 = \texttt{False}, u_3 = \texttt{True}$,
+$T_1$ has root \texttt{false} and $T_2$ has root \texttt{true}.
+
+Since $A$ only looks at the first two leaves, it must have the same state for $T_1$ and $T_2$, thus it will compute the same root value for both trees.
+
+
+\underline{Case $h > 2$}
+
+Let $T_1$ be a tree with the nodes $v_1, v_2, v_3$ as children of the root, and $T_2$ a tree with the nodes $u_1, u_2, u_3$ as children of the root.
+
+Assume A looks only at $n - 1$ leaves. Without loss of generality: $A$ does not look at one leaf contained in $v_3$ respectively $u_3$.
+
+By induction hypothesis, there exist two trees $\Bar{T_1}$ and $\Bar{T_2}$ with different roots for which $A$ computes the same value.
+
+For any $v_1 = u_1 = \Bar{T_1}$, $v_2 = u_2 = \Bar{T_2}$, $v_3 = \Bar{T_1}$ and $u_3 = \Bar{T_2}$, $T_1$ and $T_2$ have a different root, but $A$ computes the same root value
+
+\textit{q.e.d.}
+
+Thus, any deterministic algorithm must look at all $n$ leaves to compute the value at the root.
+
+\pagebreak

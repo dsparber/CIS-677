@@ -1,0 +1,68 @@
+\subsection*{Part (b)}
+
+\underline{Claim}
+
+$\forall v \in V:  |S(v)| \geq t \Rightarrow (1 - \varepsilon) |S(v)| \leq \frac{n\cdot t}{\lambda(v)} \leq (1 + \varepsilon)|S(v)|$ with high probability.
+
+\underline{Proof}
+
+Let $v \in V$ be arbitrary. Assume $|S(v)| \geq t$.
+
+We show $\Pr\left[\frac{n\cdot t}{\lambda(v)} < (1 - \varepsilon) |S(v)|\right] \leq \frac{1}{poly(n)}$ and $\Pr\left[\frac{n\cdot t}{\lambda(v)} > (1 + \varepsilon) |S(v)| \right] \leq \frac{1}{poly(n)}$. 
+
+Thus, $\Pr\left[ (1 - \varepsilon) |S(v)| \leq \frac{n\cdot t}{\lambda(v)} \leq (1 + \varepsilon)|S(v)| \right] \geq 1 - 2\cdot\frac{1}{poly(n)} \mathrel{\widehat{=}} 1 - \frac{1}{poly(n)}$.
+
+
+We define the following random variables:
+
+$\forall u \in V: Y_u = 1$ if $r(u) \leq \frac{n\cdot t}{(1 + \varepsilon)\cdot|S(v)|}$, we get $\EV[Y_u] = \frac{t}{(1 + \varepsilon)\cdot|S(v)|}$
+
+
+$Y = \sum\limits_{u \in S(v)} Y_u$, we get $\EV[Y] = \frac{t}{1 + \varepsilon}$
+
+
+$
+\Pr\left[\frac{n\cdot t}{\lambda(v)} > (1 + \varepsilon) |S(v)|\right] = 
+\Pr\left[\lambda(v) < \frac{n\cdot t}{(1 + \varepsilon) |S(v)|}\right] =
+\Pr[Y \geq t]
+$
+
+Since $\forall u \in V$, $r(u)$ was drawn uniformly at random, we can use Chernoff bounds to estimate the probability. Furthermore, we assume $\varepsilon \leq 0.5$ (if the algorithm gets a larger $\varepsilon$ as input, we just use $\varepsilon = 0.5$. This increases the run time only by a constant). 
+
+$\Rightarrow \Pr[Y \geq t] = 
+\Pr[Y \geq (1 + \varepsilon)\EV[Y]] \leq 
+e^{\frac{-\EV[Y]\cdot\varepsilon^2}{4}} =
+e^{\frac{-t\cdot\varepsilon^2}{(1 + \varepsilon)\cdot 4}} \leq
+e^{\frac{-t\cdot\varepsilon^2}{2 \cdot 4}} = 
+$
+
+$ =
+e^{\frac{-36\cdot \log n \cdot\varepsilon^2}{8\varepsilon^2}} = 
+e^{-4.5\cdot \log n} = 
+n^{-4.5} = 
+\frac{1}{poly(n)}$
+
+Analogously, we get the probability for the other case:
+
+$\forall u \in V: Y_u' = 1$ if $r(u) \leq \frac{n\cdot t}{(1 - \varepsilon)\cdot|S(v)|}$, we get $\EV[Y_u'] = \frac{t}{(1 - \varepsilon)\cdot|S(v)|}$
+
+
+$Y' = \sum\limits_{u \in S(v)} Y_u$, we get $\EV[Y'] = \frac{t}{1 - \varepsilon}$
+
+$
+\Pr\left[\frac{n\cdot t}{\lambda(v)} < (1 - \varepsilon) |S(v)|\right] = 
+\Pr\left[\lambda(v) > \frac{n\cdot t}{(1 - \varepsilon) |S(v)|}\right] =
+\Pr[Y' \leq t] = 
+\Pr[Y \leq (1 - \varepsilon)\EV[Y']] \leq 
+$
+
+$ \leq
+e^{\frac{-\EV[Y']\cdot\varepsilon^2}{2}} =
+e^{\frac{-t\cdot\varepsilon^2}{(1 - \varepsilon)\cdot 2}} \leq
+e^{\frac{-t\cdot\varepsilon^2}{1 \cdot 2}}  =
+e^{\frac{-36\cdot \log n \cdot\varepsilon^2}{2\varepsilon^2}} = 
+e^{-18\cdot \log n} = 
+n^{-18} = 
+\frac{1}{poly(n)}$
+
+

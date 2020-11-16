@@ -57,6 +57,10 @@
 \lhead{Homework 1}
 \cfoot{Page \thepage}
 
+\fancypagestyle{firstpage}{
+  \fancyhead{}
+  \cfoot{Page \thepage}
+}
 
 \begin{document}
 
@@ -65,6 +69,17 @@
 \date{\today}
 
 \newgeometry{left=2cm,right=2cm,bottom=3cm, top=3cm}
+
+
+\thispagestyle{firstpage}
+
+CIS 677 \vspace{5pt} 
+\\ {\LARGE{\textbf{Homework 1}}} \vspace{5pt} 
+\\ {\Large Daniel Sparber}
+
+Collaborators: Julian Schnitzler \& Seyoung Kim 
+
+\rule{\textwidth}{0.4pt}
 
 \input{problem1}
 \input{problem2}

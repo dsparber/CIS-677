@@ -1,0 +1,75 @@
+\section*{Problem 1}
+
+\subsection*{Algorithm}
+
+Let $A$ be the integer representation of Alice's bitstring, let $B$ be the integer representation of Bob's bitstring.
+
+Let $k = \sqrt{2n}$
+
+\begin{enumerate}
+    \item Alice picks $k\cdot\log n$ distinct primes $p_i \in [2..2n\cdot\log n]$, $i \in [1..k]$
+    \item Bob picks $k$ primes $q_i \in [2..2n\cdot\log n]$, $i \in [1..k]$
+    \item Alice computes and send all pairs $(p_i, A \text{ mod } p_i)$ and Bob all pairs $(q_i, B \text{ mod } q_i)$ for $i \in [1..k]$ to Charlie.
+    \item Charlie looks for one pair where $p_i = q_j$ for some $i, j \in [1..k]$. If such a pair exists, Charlie returns whether the second element of the respective pair is equal. Otherwise Charlie returns $A \neq B$.
+\end{enumerate}{}
+
+\subsection*{Communication}
+
+Since Alice sends $k \log n \in \bigO(\sqrt{n}\log n)$ and each pair has $\bigO(\log n)$ size (see lecture), the total number of bits for the communication is in $\bigO(\sqrt{n} \cdot \log^2 n)$.
+
+\subsection*{Correctness}
+
+Let $A$ and $B$ be arbitrary.
+
+\begin{itemize}
+    \item Case $A = B$
+    
+    If Alice and Bob have a prime in common, the algorithm correctly outputs $A = B$ since $A \text{ mod } p = B \text{ mod } p$.
+    
+    Otherwise, the algorithm makes a mistake. The probability for having no prime in common can be bound by using the birthday paradox. 
+    
+    $
+    \Pr[\textit{No primes in common}] =
+    \Pr[\textit{Bob draws non of Alice's primes}] \leq
+    $
+    
+    $\leq
+    \left(1 - \frac{k \cdot \log n}{2n \cdot \log n}\right)^{k} =
+    \left(1 - \frac{1}{\sqrt{2n}}\right)^{\sqrt{2n}} \leq
+    \frac{1}{e}
+    $
+    
+    By repeating $\ln n$ times, the error probability can be reduced to $1 - n$. The communication increases to $\bigO(\sqrt{n} \cdot \log^3 n)$.
+    
+    The success probability is therefore $1 - \frac{1}{n}$
+    
+    \item Case $A \neq B$
+    
+    The algorithm only fails, if there are some $i, j$ such that $p_i = q_j$ and $A \text{ mod } p = B \text{ mod } p$.
+    
+    The probability of having such $i, j$ is less than 1.
+    
+    By revising the algorithm from the lecture, the probability of $A \text{ mod } p = B \text{ mod } p$ given $A \neq B$ can be bounded by $\frac{1}{2}$. 
+    
+    $
+    \Pr[A \text{ mod } p = B \text{ mod } p ~|~ A \neq P] = 
+    \frac{\textit{number of distinct prime divisors of } |A - B|}{\textit{number of distinct primes in } [2..n\log n]}
+    $
+    
+    $ \leq 
+    \frac{n}{\frac{2n \log n}{log (2n \log n)}} \leq \frac{1}{2}
+    $
+    
+    Thus, the algorithm fails with probability less equal than $1 \cdot \frac{1}{2}$. By repeating $\log_2 n$ times, the error probability can be reduced to $1 - n$. The communication increases to $\bigO(\sqrt{n} \cdot \log^3 n)$.
+    
+    The success probability is therefore $1 - \frac{1}{n}$
+    
+
+    
+\end{itemize}
+
+Thus, the algorithm is outputs the correct answer with probability at least $1 - \frac{1}{\textit{poly(n)}}$.
+
+
+
+\pagebreak

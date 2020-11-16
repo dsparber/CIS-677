@@ -1,0 +1,55 @@
+\section*{Problem 3}
+
+\subsection*{Part (a)}
+
+Let $\Phi$ be arbitrary. Let $C = 34$.
+
+Assume $1\%$ of all possible assignments  for $\Phi$ are satisfying. 
+
+Assume there exists a set $S$ of $C + 1 = 35$ disjoint clauses in $\Phi$.
+
+Each clause in $S$ has three variables. There are $2^3 = 8$ possible assignments for these three variables. Only one of these assignments does not satisfy the clause. I.e. $7$ assignments are satisfying for the given clause.
+
+There are $3(C + 1)$ distinct variables in $S$ and therefore $2^{3(C+1)} = 8^{(C+1)}$ possible assignments for these variables. Out of those assignments, $7^{(C + 1)}$ are satisfying. For the remaining $k = n - 3(C + 1)$ variables, at most $2^k$ out of $2^k$ assignments are satisfying. 
+
+This yields the following percentage $p$ of satisfying assignments:
+
+$p = \frac{7^{(C + 1)} 2^k}{8^{(C + 1)}2^k} = \left(\frac{7}{8}\right)^{(C+1)} = \left(\frac{7}{8}\right)^{35} < 0.01 = 1\%$
+
+This contradicts is a contradiction. Thus, a constant C exists. C is at most $34$.
+
+\subsection*{Part (b)}
+
+Let $\Phi$ be arbitrary. Let $S$ be the largest set of disjoint clauses in $\Phi$. Let $V$ be the set of all variables that occur in the clauses of $S$.
+
+We know $S$ has at most $C$ clauses. Therefore, $V$ has at most $3C$ variables. 
+
+\underline{Claim:} Every clause in $\Phi$ has at least one variable in $V$.
+
+\underline{Proof:} Assume there exists a clause $X \in \Phi$ with no variables in $V$. Therefore, $X$ is disjoint to all clauses in $S$. Thus, $S$ is not the largest set of disjoint clauses ($S \cup \{X\}$ is larger). This is a contradiction.
+
+\subsection*{Part (c)}
+
+We continue using the set $V$ form part (b).  Let $k = |V|$.
+
+
+\underline{Algorithm}
+
+
+For all possible assignments $A$ for the variables in $V$:
+
+\begin{itemize}
+    \item Modify $\Phi$ as following: 
+    \begin{enumerate}
+        \item Replace all variables of $\Phi$ which are part of in $V$ with their corresponding assignment.
+        \item Remove all clauses that now contain a $1$, since they are trivially satisfied.
+        \item Remove all zeros, since they do not change the logic value of a clause.
+    \end{enumerate}
+    \item Run a 2-SAT solver on the modified $\Phi$.
+\end{itemize}
+
+Each clause in $\Phi$ has at least one variable in $V$. Therefore, after modifying $\Phi$ as described above, there are at most 2 variables remaining in every clause. The number of clauses is at most as high as the number of clauses in the original $\Phi$. The modified $\Phi$ is always therefore always a valid 2-SAT formula.
+
+There are at most $2^{3C}$ possible assignments for variables in $V$. Thus, the algorithm solves at most $2^{3C}$ 2-SAT instances.
+
+\pagebreak

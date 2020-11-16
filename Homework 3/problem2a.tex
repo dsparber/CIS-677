@@ -1,0 +1,29 @@
+\subsection*{Part (a)}
+
+To compute all $\lambda(v)$ we use the following approach:
+
+First, we compute all strongly connected components in $G(V,E)$ with a DFS based algorithm (e.g. Tarjan).
+
+By doing this we get a graph $G'$ of strongly connected components. Each node in $G'$ represents a strongly connected component. $G'$ is acyclic (if $G'$ had a cycle, all components on this cycle would be strongly connected, thus contradicting the construction of $G'$). 
+
+For every strongly connected component $C$, we compute a sorted list $L_C$ of $r(v)$ values ($v \in C$). We store at most $t$ elements in this list. This list can be constructed by inserting the nodes of the component into a linked list $L_C$. We use linear search to find the correct position. If the linear search visits more than $t$, we abort the search and do not insert the node into the list.
+
+Since $G'$ is acyclic, we compute the topological order of $G'$ with a modiefied DFS. We traverse the components in reverse topological order (i.e. starting at a sink). For every component we merge the sorted lists $L_C$ of the component with the lists of all direct successors and assign the merged list to $L_C$. When merging we only keep the first $t$ values.
+
+For every component $C$ and every $v \in C$, we set $\lambda(v)$ to the $t$-th element of the list $L_C$.
+
+\underline{Runtime}
+
+We perform two DFS based algorithms over the entire graph. The runtime for this is bounded by $\bigO(n + m)$. Furthermore, every node $v \in V$ is inserted exactly once into one $L_C$. Inserting uses at most $t$ steps (linear search). Thus, inserting all elements is bounded by $\bigO(n\cdot t)$. We merge at most $m$ lists and merging takes $t$ steps, yielding a bound of $\bigO(m\cdot t)$.
+Getting the $t$-th element for all nodes and saving all $\lambda(v)$ is also bounded by $\bigO(n\cdot t)$.
+
+The total runtime is bounded by $\bigO((n + m) \cdot t)$.
+
+\underline{Correctness}
+
+For any strongly connected component $C$, $\lambda(v)$ is the same for all $v \in C$, since the same nodes are reachable for every node in $C$.
+The reachable nodes for all $v \in C$ are the nodes in $C$ and all nodes, that are in any successor component of $C$.
+
+Thus, the algorithm yields the correct $\lambda(v)$ $\forall v \in V$ by construction of the $L_C$s.
+
+\pagebreak

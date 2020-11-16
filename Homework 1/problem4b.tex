@@ -10,20 +10,21 @@ Returns an index $i$ with $V[i] \neq 0$ with probability of at least $1 - \delta
 
 \subsubsection*{Algorithm}
 
-If d = 1: run deterministic algorithm on $V$
-
-Otherwise:
 \begin{itemize}
     \item Repeat $k$ times:
     \begin{enumerate}
         \item For $i \in [1..n]$: Draw $x_i \in \{0, 1\}$ with $\Pr[x_i = 1] = \frac{1}{d}$ 
         
-        \item Let $W = [V[0]\cdot x_0,\dots,V[n] \cdot x_n ]^T$
+        \item Let $S = \{i ~| ~ i \in [1..n] \text{ if } x_i = 1\}$
         
-        \item If $Q_W([1..n]) \neq 0$:
+        \item If $Q(S) \neq 0$:
                 
         \begin{itemize}
-            \item Run deterministic algorithm on $W$
+            \item Run deterministic algorithm with the following modification:
+            
+            Instead of using $S_k$, $S_k^\prime = \{s ~ | ~ s \in S_k \text{ if } x_s = 1\}$ is used.
+            
+            Instead of using $\Bar{S_k}$, $\Bar{S_k}^\prime = \{s ~ | ~ s \in \Bar{S_k} \text{ if } x_s = 1\}$ is used.
             
             \item If index is returned by deterministic algorithm: return index
             
@@ -51,12 +52,20 @@ By repeating $k \in \bigO(\log(1/\delta))$ times, the total number of summation 
 \begin{itemize}
     \item Case $d = 1$:
     
-    The algorithm executes the deterministic algorithm. All necessary input conditions are met.
+    For every $i \in [1,\dots,n]$ $x_i = 1$ with probability $1$. Thus, the algorithm simply performs the deterministic algorithm. One iteration of the randomized algorithm is performed.
 
-    Thus, correctness follows from correctness of deterministic algorithm. The probability of returning the correct index is $1$ and therefore at least $1 - \delta$.
-    
+    The correctness follows from correctness of deterministic algorithm. The probability of returning the correct index is $1$ and therefore at least $1 - \delta$.
     
     \item Case $d \neq 1$
+    
+    Every index $i$, where $x_i = 0$, is never in any set $S_k^\prime$ and $\Bar{S_k}^\prime$. Thus, both summation queries never contains $V[i]$. 
+    
+    Likewise, every index $i$, where $x_i = 1$ is always in $S_k^\prime$ whenever $i$ is in $S_k$ and in $\Bar{S_k}^\prime$ whenever $i$ is in $\Bar{S_k}$
+    
+    Let $W = [V[0]\cdot x_0,\dots,V[n]\cdot x_n]$
+    
+    For this definition of $W$, performing the summation queries on $W$ with $S_k$ and $\Bar{S_k}$ is equivalent to performing the summation query on $V$ with $S_k^\prime$ and $\Bar{S_k}^\prime$. In the following steps, the equivalent problem, using $W$ is analyzed.
+    
     
     \underline{Analyzing one iteration:}
     

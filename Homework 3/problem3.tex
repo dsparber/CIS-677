@@ -1,0 +1,166 @@
+\section*{Problem 3}
+
+\subsection*{Part (a)}
+
+\underline{Claim}
+
+$\forall i \in [1...N - 1]: P_{i+1} - P_i = \frac{q}{p}(P_i - P_{i-1})$
+
+\underline{Proof}
+
+Let $i \in [1...N - 1]$ be arbitrary.
+
+To win from state $i$, the gambler performs one round. With probability $p$ the gambler ends up in $i + 1$, with probability $q$ the gambler ends up in $i - 1$. The probability of winning from $i - 1$ is $P_{i-1}$ and $P_{i + 1}$ from $i + 1$, thus:
+
+$P_i = p \cdot P_{i + 1} + q \cdot P_{i - 1}$
+
+Since $p + q = p  + (1 - p) = 1$:
+
+$p \cdot P_i + q \cdot P_i = p \cdot P_{i + 1} + q \cdot P_{i - 1}$
+
+Rearranging the equation:
+
+$p \cdot P_{i + 1} - p \cdot P_i = q \cdot P_i - q \cdot P_{i - 1}$
+
+$p \cdot (P_{i + 1} - P_i) = q \cdot (P_i - P_{i - 1})$
+
+$P_{i + 1} - P_i = \frac{q}{p} \cdot (P_i - P_{i - 1})$
+
+\subsection*{Part (b)}
+
+\underline{Claim}
+
+$P_{i + 1} - P_i = \left(\frac{q}{p}\right)^i \cdot P_1$
+
+\underline{Proof}
+
+By induction over $i$. 
+
+Let $i \in [1...N - 1]$ be arbitrary.
+
+\begin{itemize}
+    \item Case $i = 1$
+    
+    $P_{i + 1} - P_i = P_2 - P_1 
+    = \frac{q}{p}(P_1 - P_0) = \frac{q}{p}(P_1 - 0) 
+    = \left(\frac{q}{p}\right)^1 \cdot P_1 
+    = \left(\frac{q}{p}\right)^i \cdot P_1$
+    
+    \item Case $i > 1$
+    
+    $P_{i + 1} - P_i
+    = \frac{q}{p}(P_{i} - P_{i - 1})
+    = \frac{q}{p} \cdot \left(\frac{q}{p}\right)^{i - 1} \cdot P_1
+    = \left(\frac{q}{p}\right)^i \cdot P_1$
+    
+\end{itemize}
+
+\underline{Claim}
+
+$P_{i + 1} = \left( \sum\limits_{j = 0}^i \left(\frac{q}{p}\right)^j \right) \cdot P_1$
+
+\underline{Proof}
+
+\textit{Note:} Rewriting the formula from the previous claim yields: $P_{i + 1} = P_i + \left(\frac{q}{p}\right)^i \cdot P_1$
+
+By induction over $i$. 
+
+
+Let $i \in [1...N - 1]$ be arbitrary.
+
+
+\begin{itemize}
+    \item Case $i = 1$
+    
+    $P_{i + 1} 
+    = P_1 + \frac{q}{p} \cdot P_1
+    = \left( \left(\frac{q}{p}\right)^0 + \left(\frac{q}{p}\right)^1 \right) \cdot P_1
+    = \left( \sum\limits_{j = 0}^1 \left(\frac{q}{p}\right)^j \right) \cdot P_1
+    = \left( \sum\limits_{j = 0}^i \left(\frac{q}{p}\right)^j \right) \cdot P_1$
+    
+    \item Case $i > 1$
+    
+    $P_{i + 1} 
+    = P_i + \left(\frac{q}{p}\right)^i \cdot P_1
+    = \left( \sum\limits_{j = 0}^{i - 1} \left(\frac{q}{p}\right)^j + \left(\frac{q}{p}\right)^i \right) \cdot P_1
+    = \left( \sum\limits_{j = 0}^i \left(\frac{q}{p}\right)^j \right) \cdot P_1$
+    
+\end{itemize}
+
+
+\subsection*{Part (c)}
+
+\underline{Claim}
+
+$p = q = \frac{1}{2} \Rightarrow P_i = \frac{i}{N}$
+
+\underline{Proof}
+
+Let $i \in [0...N]$ be arbitrary.
+
+\begin{itemize}
+    \item Case $i = 0$: 
+    
+    $P_i = P_0 = 0 = \frac{0}{N} = \frac{i}{N}$ 
+
+    \item Case $i = 1$: 
+    
+    $P_N 
+    = \left(\sum\limits_{j = 0}^{N - 1} \left(\frac{q}{p}\right)^j \right) \cdot P_1
+    = \left(\sum\limits_{j = 0}^{N - 1} 1 \right) \cdot P_1
+    = N \cdot P_1$
+
+    
+    $\Rightarrow 
+    P_1 = \frac{P_N}{N} = \frac{1}{N} = \frac{i}{N}$ 
+    
+    \item Otherwise:
+    
+    $P_i 
+    = \left(\sum\limits_{j = 0}^{i - 1} \left(\frac{q}{p}\right)^j \right) \cdot P_1
+    = \left(\sum\limits_{j = 0}^{i - 1} 1 \right) \cdot P_1
+    = i  \cdot P_1
+    = \frac{i}{N}$ 
+    \end{itemize}
+
+
+~\\
+
+\underline{Claim} 
+
+$p \neq q \Rightarrow P_i = \frac{1 - \left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N}$
+
+\underline{Proof}
+
+The term $\sum\limits_{j = 0}^{i - 1} \left(\frac{q}{p}\right)^j$ is a geometric series. From calculus we know:
+$\sum\limits_{j = 0}^{i - 1} \left(\frac{q}{p}\right)^j = \frac{1 - \left(\frac{q}{p}\right)^i}{1 - \frac{q}{p}}$
+
+Let $i \in [0...N]$ be arbitrary.
+
+\begin{itemize}
+    \item Case $i = 0$: $P_i = P_0 = 0 = \frac{1 - 1}{N} 
+    = \frac{1 - \left(\frac{q}{p}\right)^0}{1 - \left(\frac{q}{p}\right)^N}
+    = \frac{1 - \left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N}$ 
+    
+    \item Case $i = 1$: 
+    
+    $P_N 
+    = \left(\sum\limits_{j = 0}^{N - 1} \left(\frac{q}{p}\right)^j \right) \cdot P_1
+    = \left(\frac{1 - \left(\frac{q}{p}\right)^N}{1 - \frac{q}{p}} \right) \cdot P_1$
+    
+    $\Rightarrow P_1 
+    = \frac{1 - \frac{q}{p}}{1 - \left(\frac{q}{p}\right)^N} 
+    = \frac{1 - \left(\frac{q}{p}\right)^1}{1 - \left(\frac{q}{p}\right)^N}
+    = \frac{1 - \left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N}$ 
+    
+    
+    \item Otherwise
+    
+    $P_i 
+    = \left(\sum\limits_{j = 0}^{i - 1} \left(\frac{q}{p}\right)^j \right) \cdot P_1
+    = \left(\frac{1 - \left(\frac{q}{p}\right)^i}{1 - \frac{q}{p}} \right) \cdot P_1
+    = \frac{1 - \left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N}$
+    
+\end{itemize}
+
+\pagebreak

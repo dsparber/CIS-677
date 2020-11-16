@@ -1,0 +1,26 @@
+\section*{Problem 3}
+
+First consider the case, where all colors are available for a given node $v$. Since $\Delta$ is the maximum degree in $G$, $v$ has at most $\Delta$ neighbors. In the worst case, those $\Delta$ neighbors all need to be colored with different colors. Even so, there are still $2 \Delta - \Delta = \Delta$  colors remaining to color $v$. Thus, there are at least $\Delta$ good colors for $v$.
+
+For every node $2 \log n$ colors are picked uniformly at random. The following steps calculate a lower bound for the probability of picking at least one good color for every node. 
+
+Let $v \in V$ be arbitrary.
+
+$\Pr[\textit{Picking a good color for v with one trial}] \geq \frac{\Delta}{2\Delta} = \frac{1}{2}$
+
+$\Rightarrow \Pr[\textit{Picking a bad color for v with one trial}] \leq \frac{1}{2}$
+
+$\Rightarrow \Pr[\textit{Picking only bad colors for v (with } 2\log n \textit{ trials)}] \leq 
+\left(\frac{1}{2}\right)^{2 \log n} = 
+2^{-2 \log n} = 
+n^{-2} = 
+\frac{1}{n^2}$
+
+$\Rightarrow \Pr[\textit{Some node picks only bad colors}] \leq n \cdot \frac{1}{n^2} = \frac{1}{n}$
+
+$\Rightarrow \Pr[\textit{All nodes pick at least one good color}] = 
+1 - \Pr[\textit{Some node picks only bad colors}] \geq 1 - \frac{1}{n}$
+
+Therefore, the probability that a $(2\Delta)$-coloring of the graph, such that every vertex is assigned only one of the colors it has sampled, exists with propability at least $1 - 1/n$.
+
+\pagebreak

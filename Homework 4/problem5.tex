@@ -1,0 +1,49 @@
+\section*{Problem 5}
+
+\underline{High level outline:}
+
+\begin{itemize}
+    \item Use some computation, such that the expected value is equal to the total amount of annual sales.
+    \item Use Chernoff bounds to analyse the probability, use the formulas for relative error with $\delta = 0.01 = 1\%$. 
+    \item Do the computation $c \in \log (N + M))^{\bigO(1)}$ times with some random parameters and send the concatenation of all results to the headquarter. By repeating $c$ times the probability of getting the correct result is at least $99\%$.
+\end{itemize}
+
+If the result of each computation each server does is of order $(\log (N + M))^{\bigO(1)}$, then the total size of the single message each server sends is also bound by $(\log (N + M))^{\bigO(1)}$.
+
+\underline{Computation:}
+
+\textit{Idea 1:}
+
+Each server picks some entries at random, computes the sum of sales and sends the result to the headquarter. The headquarter sums up all received values. 
+
+We adjust the way elements are picked at random such that on expectation no value is missing or duplicated amongst all messages.
+
+To have no duplicates we could use the shared source of randomness to assign stores to servers. If the server has the requested entry, it includes it into the sum.
+
+The servers can also send the count of tuples that are part in their sum to the headquarter. The count can be sent with $\log M$ bits. The server can sum up the counts as well to check if all stores were included.
+
+\underline{Analysis}
+
+\textit{Idea 1:}
+
+Let $X$ be a random variable. $X$ is consists of independent Bernoulli random variables has the following property:
+
+$\EV[X] = \mu = $ total amount of annual sales.
+
+$1 \cdot N \leq \mu \leq M \cdot N$
+
+
+We now use Chernoff bounds ($\delta = 0.01$):
+
+$\Pr[X > (1 + \delta) \EV[X]] \leq e^{-\frac{\mu\delta^2}{4}} \leq e^{-\frac{N}{40,000}}$
+
+$\Pr[X < (1 - \delta) \EV[X]] \leq e^{-\frac{\mu\delta^2}{2}} \leq e^{-\frac{N}{20,000}}$
+
+By repeating $c = 6 \cdot 40,000$ times, the probability of failure can be reduced to:
+
+$\Pr[X > (1 + \delta)\mu] \leq e^{-\frac{c\cdot N}{40,000}} = e^{-6N} \leq e^{-6} <  0.005$
+
+$\Pr[X < (1 - \delta)\mu] \leq e^{-\frac{c\cdot N}{20,000}} = e^{-12N} \leq e^{-6} <  0.005$
+
+
+Therefore, the success probability is greater than $99\%$.

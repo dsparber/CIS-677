@@ -1,0 +1,73 @@
+\section*{Problem 1}
+
+Let $G(V,E)$ be an arbitrary undirected graph.
+
+Without loss of generality, let $V = [1..n]$, let $\pi \in S_n$ be a random permutation.
+
+We now construct the directed acyclic graph $G'(V, E')$:
+
+$\forall \{u, v\} \in E: $ if $\pi(u) < \pi(v)$ then $(u, v) \in E'$ otherwise $(v, u) \in E'$
+
+$G'$ has the same vertices as $G$ and a topological order determined by $\pi$. I.e. the topological order is equivalent to sorting the nodes $v \in V$ by $\pi(v)$ in ascending order. For every edge in the original graph, $G'$ contains an directed edge with the same nodes, that respects the topological order induced by $\pi$.
+
+By construction $G'$ is a DAG. We now run the deterministic poly-time algorithm on $G'$.
+
+\begin{itemize}
+    \item Case I: $G$ does not contain simple path of length $k$ 
+    
+    Since $G'$ does not add any additional edges, the longest path of $G'$ is at most as long as the longest path in $G$. Therefore, $G'$ contains no path of length $k$. Thus, the deterministic poly-time algorithm always rejects.
+    
+    \item Case II: $G$ contains a simple path of length at lest $k$
+    
+    Let $p = p_1,p_2,..,p_k$ be a path of length $k$ (not necessarily unique). 
+    
+    $G'$ also contains $p$ if $\pi(p_1) > \pi(p_2) > \cdots > \pi(k)$. I.e. if the topological order induced by the random permutation $\pi$ does not destroy the path $p$. Note: the reverse order also preserves the path.
+    
+    Any permutation $\pi \in S_n$ is called good, if it preserves the path. 
+    
+    We now analyze the probability of picking a good permutation at random.
+    
+    First, for every good permutation, there are $k! - 2$ bad permutations. This follows from the fact that taking a good permutation and only permuting the nodes in $p$ results in $k! - 1$ bad permutations (there is $k!$ permutations which only permute the nodes in $p$, the original and reverse permutations are good). 
+    
+    Thus, the probability of picking a good permutation is at least $\frac{1}{k! - 2}$.
+    
+    Since $k$ is bounded by $\frac{\log n}{\log \log n}$:
+    
+    $k! - 2 < 
+    k! \leq 
+    k^k \leq 
+    \left(\frac{\log n}{\log \log n}\right)^{\frac{\log n}{\log \log n}} \leq 
+    \left(\log n\right)^{\frac{\log n}{\log \log n}} =
+    \left(2^{\log \log n}\right)^{\frac{\log n}{\log \log n}} = 
+    2^{\log n} = 
+    n$
+    
+    This implies a probability of at least $\frac{1}{n}$ for picking a good permutation. 
+    
+    Consider the new algorithm:
+    
+    Repeat $2n$ times:
+    \begin{enumerate}
+        \item Pick random $\pi \in S_n$
+        \item Construct $G'$
+        \item Run deterministic algorithm:
+        \begin{itemize}
+            \item If accepts: output YES
+        \end{itemize}
+        
+    \end{enumerate}
+    
+    The algorithm runs in poly-time since every step only takes poly-time and the number of repetitions is also polynomial. 
+    
+    The algorithm only fails, if every round fails. By the previous analysis the probability of failure for one round less than $1 - 1/n$.
+    
+    $\Pr[\textit{success}] = 
+    1 -\Pr[\textit{failure}] \geq 
+    1 - (1 - 1/n)^{2n} \geq
+    1 - e^{-2} \geq 
+    1 - 1/4 =
+    3/4 ~ _\square$
+    
+    \end{itemize}
+
+\pagebreak

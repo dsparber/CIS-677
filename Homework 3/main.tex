@@ -1,0 +1,96 @@
+\documentclass[11pt,letterpaper,titlepage]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary {positioning}
+\usepackage{color}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\renewcommand\textproc{}
+\usepackage{pgfplots}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\usepackage{listings}
+\usepackage[headings]{fullpage}
+\usepackage{multirow}
+\usepackage[paper=a4paper,margin=2cm]{geometry}
+\pgfplotsset{compat=1.15}
+
+% Customizing
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mymauve}{rgb}{0.58,0,0.0}
+\lstset{ %
+  basicstyle=\ttfamily,
+  keepspaces=true,
+  tabsize=2,
+  commentstyle=\color{mygreen},
+  language=Python,
+  keywordstyle=\color{mymauve}
+}
+\definecolor{nodeColor}{RGB}{230,230,230}
+\definecolor{forward}{RGB}{200,15,15}
+\definecolor{backward}{RGB}{60,150,210}
+\definecolor{quer}{RGB}{60,180,0}
+
+% Commands
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\Epsilon}{\mathcal{E}}
+\newcommand{\EV}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Bin}[1]{\mathrm{Bin}{\left({#1}\right)}}
+\newcommand{\Poi}[1]{\mathrm{Poi}{\left({#1}\right)}}
+\newcommand{\Geo}[1]{\mathrm{Geo}{\left({#1}\right)}}
+\newcommand{\qed}[1]{{\:}_\square}
+\newcommand{\eqtext}[1]{\ensuremath{\stackrel{\text{#1}}{=}}}
+
+% Meta
+\newcommand{\name}{Daniel Sparber}
+\newcommand{\course}{CIS 677}
+\newcommand{\taskName}{Homework 3}
+\newcommand{\collaborators}{Julian Schnitzler \& Seyoung Kim}
+
+% Header & Footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\name}
+\chead{\course}
+\lhead{\taskName}
+\cfoot{Page \thepage}
+
+\fancypagestyle{firstpage}{
+  \fancyhead{}
+  \cfoot{Page \thepage}
+}
+
+\begin{document}
+
+\title{\course - \taskName}
+\author{\name}
+\date{\today}
+
+\newgeometry{left=2cm,right=2cm,bottom=3cm, top=3cm}
+
+
+\thispagestyle{firstpage}
+
+\course \vspace{5pt} 
+\\ {\LARGE{\textbf{\taskName}}} \vspace{5pt} 
+\\ {\Large \name}
+
+Collaborators: \collaborators
+
+\rule{\textwidth}{0.4pt}
+
+\input{problem1}
+\input{problem2}
+\input{problem3}
+\input{problem4}
+\input{problem5}
+
+\end{document}

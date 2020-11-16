@@ -1,0 +1,68 @@
+\section*{Problem 4}
+
+Let $G(V,E)$ be the original graph.
+To analyse this problem, we construct a new graph $G'(V', E')$. 
+
+$V' = \{(u,v)\ ~ | ~ u, v \in V\}$
+
+$E' = \{((u,v), (x,y)) ~|~ (u, x), (v, y) \in E\}$
+
+The node $(u,v)$ symbolises the lion being in state $u$ and the deer being in state $v$ in the original graph.
+
+Let $n = |V|, m = |E|$, then $|V'| = n^2, |E'| = m^2$ follows directly from the definition of the new graph.
+
+Since $G$ is not bipartite, $G$ has at least one odd cycle $C$. Let the nodes of $C$ be denoted by $c_1, c_2, \dots c_k$ where $k$ is the length of $C$. From the definition of $G'$ follows that the nodes $(c_1,c_1), (c_2,c_2),\dots,(c_k,c_k)$ are connected to each other on a cycle in $G'$ and thus form the odd cycle $C'$.
+Since $C'$ exists, $G'$ is not bipartite.
+
+\underline{Claim}
+
+$\forall (u,v), (x,y) \in V'$, there exists a path from $(u, v)$ to $(x, y)$ with length $\bigO(n)$ in $G'$.
+
+\underline{Proof}
+
+Let $(u,v), (x,y) \in V$ be arbitrary.
+
+Since $G$ is connected, there exists a path $P_1$ from $u$ to $x$ and $P_2$ from $v$ to $y$.
+Let $l_1$ be the length of $P_1$ and $l_2$ be the length of $P_2$.
+Since $G$ has only $n$ nodes, $l_1, l_2 \in \bigO(n)$.
+
+\begin{itemize}
+    \item Case 1: $l_1 \equiv l_2 ~ (\operatorname{mod}~ 2)$
+    
+    Assume without loss of generality $l_1 \leq l_2$.
+    
+    Let $u = p_1 \rightarrow p_2 \rightarrow \cdots \rightarrow p_{l_1} = x$ be the representation of $P_1$ and  $v = q_1 \rightarrow q_2 \rightarrow \cdots \rightarrow q_{l_2} = y$ be the representation of $P_2$.
+    
+    Consider the following path: $(u, v) = (p_1, q_1) \rightarrow (p_2, q_2) \rightarrow \dots \rightarrow (p_{l_1}, q_{l_1}) = (x, q_{l_1})$. This path exists by definition of $G'$. 
+    
+    To get to $(x, y)$, we extend the path in the following way: The lion moves between $p_{l_1 - 1}$ and  $p_{l_1}$ until the deer arrives at at $q_{l_2}$. I.e. the first part of the tuple transitions between $p_{l_1 - 1}$ and $p_{l_1}$, the second part continues from $q_{l_1 + 1}$ to $q_{l_2}$. Since $l_1 \equiv l_2 ~ (\operatorname{mod}~ 2)$, the last node of the extension is $(p_{l_1}, q_{l_2}) = (x, y)$. 
+    
+    Concatenating those paths results in a path from $(u,v)$ to $(x,y)$ with length $l_2 \in \bigO(n)$. 
+    
+    \item Case 2: $l_1 \not\equiv l_2 ~ (\operatorname{mod}~ 2)$
+    
+    Let $P_c$ be a path from $u$ to $c_1$, i.e. a path to the odd cycle. This path exists since $G$ is connected. The length of $P_c$ is at most $n$. Let $\Bar{P}_c$ denote the same path but backwards.
+    
+    Let $\Bar{P}_1$ be a new walk on $G$: 
+    
+    $\Bar{P}_1 = P_c + C + \Bar{P}_c + P_1$
+    
+    Let $\Bar{l}_1$ be the length of $\Bar{P}_1$.
+    
+    Since the length of $C$ is odd and the length of $P_c + \Bar{P}_c = $ length of $2P_c$ is even, the following holds: $\Bar{l}_1 \not\equiv l_1 ~ (\operatorname{mod}~ 2)$, hence: $ \Bar{l}_1 \equiv l_2 ~ (\operatorname{mod}~ 2)$ 
+    
+    Thus, the problem was reduced to case 1 and therefore a path from $(u,v)$ to $(x,y)$ with length $\bigO(n)$ exists.
+    
+\end{itemize}
+
+Since $\forall (u,v), (x,y) \in V'$, there exists a path from $(u, v)$ to $(x, y)$ with length $\bigO(n)$ in $G'$, the diameter $D$ of $G'$ is in $\bigO(n)$ by definition.
+
+By invoking the corollary from the lecture, we know that the the maximum hitting 
+time for any pair of vertices is bounded by $\bigO(|E'|D) = \bigO(m^2n)$. 
+
+Let $u, v$ be the the start vertices of the lion and the deer. The lion eats the dear if they arrive at a state $(w, w)$ for an arbitrary $w \in V$.
+
+Since the bound $\bigO(m^2n)$ holds for any pair of vertices, it also holds for $(u,v)$ and $(w, w)$. Thus, the expected number of time steps for which the deer remains alive is bounded by $\bigO(m^2n)$.
+
+
+\pagebreak 

@@ -1,0 +1,77 @@
+\section*{Problem 2}
+
+First consider the case, where $S$ and $T$ only differ at one element, i.e. $|T| = |S| - 1$.
+
+Consider the following algorithm: 
+
+\begin{enumerate}
+    \item Alice calculates the sum of all her elements $S_A$ and sends it to Bob
+    \item Bob calculates the sum over all his elements $S_B$
+    \item Bob outputs $S_A - S_B$
+\end{enumerate}
+
+$S_A$ is at most $\frac{n \cdot (n + 1)}{2} \leq n^2$ and can therefore be decoded with $2\cdot\log n$ bits. 
+
+Since there is only one element $x \in S$ that is not in $T$, the difference of the sums must equal $x$. Therefore the algorithm outputs an element in $S\setminus T$.
+
+Now, let $T$ and $S$ be arbitrary subsets of $[1..n]$ with $T \subset S$. 
+
+Let $d = |S| - |T|$, let $n^*$ be the smallest power of 2 such that $n^* \geq n$.
+
+Since Alice does not know $d$, she executes the following algorithm:
+
+For $p \in \left\{1, \frac{1}{2}, \frac{1}{4}, \dots, \frac{1}{n^*}\right\}$:
+
+\begin{enumerate}
+    \item Bob and Alice choose $V \subset [1..n]$, $\forall i \in [1..n]: i \in V$ with probability $p$, from their shared source of randomness
+    \item Alice computes $S_A^* = \operatorname{sum}(S \cap V)$
+    \item Alice computes and sends $(S_A^*, |S \cap V|)$ 
+    \item Bob: computes $S_B^* = \operatorname{sum}(S \cap T)$
+    \item If $|S \cap V| = |T \cap V| + 1$: Bob returns $S_A^* - S_B^*$
+\end{enumerate}
+
+\textit{Note:} Instead of sending individual messages, all messages can be combined to one. Bob does his calculations after receiving this one message.
+
+For one iteration the communication is in $\bigO(log n)$ bits, since both $S_A^*$ and $|A \cap S|$ require less than $2\cdot\log n$ bits. In total, there are $\log n^*$ repetitions, thus the total communication is in $\bigO(\log^2 n)$.
+
+Since $(T \cap V) \subset (S \cap V)$, the results from the previous algorithm can be used. With this, a correct result is always returned if $|S \cap V| = |T \cap V| + 1$.
+
+Thus we only need to show, that the probability of $|S \cap V| = |T \cap V| + 1$ is high enough for at least one iteration.
+
+If $|S| - |T| = 1$, the algorithm succeeds with probability 1 in the first iteration. Otherwise the following analysis can be made:
+
+There is one iteration where $p = \frac{1}{2^k}$ for each $k \in [2..\log n^*]$. Let $k'$ be such that $2^{k' -1} < d \leq 2^{k'}$. Let $c = 2^{k'}$. Then $\frac{c}{2} < d \leq c \Leftrightarrow \frac{c}{2} + 1 \leq d \leq c$ .
+
+$
+\Pr[\textit{Picking exactly 1 of the d elements when } p = 1/c] 
+$
+
+$ \geq
+\Pr[\textit{Picking exactly 1 of } c/2 + 1 \textit{ elements when } p = 1/c] = \textit{ (by binomial distribution)}
+$
+
+$ = 
+{c/2 + 1 \choose 1} \cdot \frac{1}{c} \cdot \left(1 - \frac{1}{c} \right)^{c/2} = 
+(c/2 + 1)  \cdot \frac{1}{c} \cdot \sqrt{\left(1 - \frac{1}{c}\right)^c} \geq
+\frac{1}{2} \cdot \sqrt{\left(1 - \frac{1}{c}\right)^c} \geq \textit{ (by using calculus and } c \geq 2)
+$ 
+
+$ \geq 
+\frac{1}{2} \sqrt{\frac{1}{4}} = \frac{1}{4}
+$
+
+Therefore, the probability of failure is at most $1 - \frac{1}{4} = \frac{3}{4}$.
+
+Instead of executing the algorithm once, we execute it $9 \cdot \log (1/\delta)$ times. The total communication is now in $\bigO(\log^2 n \log (1/\delta))$.
+
+$\Pr[\textit{failure}] \leq 
+\left(\frac{3}{4}\right)^{9 \cdot \log (1/\delta)} = 
+e^{9 \cdot \log (1/\delta) \cdot \log(3/4)} \leq
+e^{-\log(1/\delta)} = 
+e^{\log \delta} =
+\delta$
+
+Thus, the success probability is at least $1 - \delta$.
+
+\pagebreak
+

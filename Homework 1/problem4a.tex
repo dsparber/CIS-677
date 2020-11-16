@@ -21,9 +21,9 @@ Returns unique index $i$ such that $V[i] \neq 0$ whenever $V$ contains exactly o
     \item For $k \in \{0,\dots, \lceil \log n \rceil\}$:
 
     \begin{itemize}
-        \item $S_k := \{s ~ | ~ s \in U \text{ if } s_k = 0 \}$
+        \item $S_k := \{s ~ | ~ s \in U \text{ if } s_k = 0 \}$, $\Bar{S_k} = U \setminus S_k$
                 
-        \item if $Q(S_k) \neq 0$ and $Q(U \setminus S_k) \neq 0$: return ``More than one non-zero entry''
+        \item if $Q(S_k) \neq 0$ and $Q(\Bar{S_k}) \neq 0$: return ``More than one non-zero entry''
         
         \item $a_k = 1$ if $Q(S_k) \neq 0$ else $0$
         

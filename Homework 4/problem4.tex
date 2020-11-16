@@ -1,0 +1,19 @@
+\section*{Problem 4}
+
+We define an arbitrary node $c \in V$ as center node.
+
+$E' = \{\{c, v\} ~|~ v \in V\}$
+
+$E'$ contains exactly $n$ edges by construction, thus fulfilling the requirement of the task.
+
+The diameter of $G'(V, E \cup E')$ is bounded by $2$ since, for any $u, v \in V$, $u \rightarrow c \rightarrow v$ is a valid path in $G'$ of length $2$.
+
+$G$ is connected, therefore $m \geq n - 1$. Furthermore, $|E'| \in \bigO(n) \subseteq \bigO(m)$ and $|E| = m$. The total number of edges $|E \cup E'|$ is therefore in $\bigO(m)$.
+
+\textit{Corollary form lecture:} In an undirected graph with diameter $D$, the cover time is bound by $\bigO(mD\log n)$.
+
+By invoking the corollary we get a cover time of $\bigO(m 2 \log n) = \bigO(m \log n)$.
+
+
+
+\pagebreak 

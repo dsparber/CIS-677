@@ -1,0 +1,99 @@
+\section*{Problem 4}
+
+\subsection*{Simple randomized algorithm}
+
+\underline{Algorithm}
+
+\begin{enumerate}
+    \item Assign every $v \in V$ with $p = \frac{1}{2}$ to $U$
+    \item Return $U$
+\end{enumerate}
+
+\underline{Analysis}
+
+By definition, there is some maximum directed cut in $G$ (not necessarily unique).
+Let $E_{max}$ be the set of all edges in that cut.
+
+The probability of any edge $(i, j) \in E_{max}$ being in the cut that the algorithm generates, can be calculated as following:
+
+$\Pr[\textit{(i, j) part of cut}] = 
+\Pr[i \in U] \cdot \Pr[j \in W] = 
+\Pr[i \in U] \cdot \Pr[j \notin U]= 
+\frac{1}{2} \cdot \frac{1}{2} = 
+\frac{1}{4}$
+
+Thus, this algorithm yields a 4-approximation.
+
+\subsection*{Integer linear program}
+
+$z_{ij}$ is $1$ if the edge $(i, j) \in E$ is part of the cut, otherwise $0$.
+
+$x_i$ is $1$ if $i \in U$, otherwise $0$.
+
+Maximizing $\sum\limits_{(i,j)\in E} z_{ij}$ will therefore maximize the number of edges going from $U$ to $W$.
+
+Every $i \in V$ is either part of $U$ or not, there is no in between. This is enforced by $\forall i \in V, x_i \in \{0, 1\}$.
+
+$z_{ij}$ can be $1$ only if $i \in U$ and $j \in W$, otherwise it needs to be 0. This is strictly enforced by the three constraints $\forall (i, j) \in E, z_{ij} \leq x_i$, $\forall (i, j) \in E, z_{ij} \leq 1 - x_j$ and $\forall (i, j) \in E, 0 \leq z_{ij} \leq x_i$ combined with the fact, that $x_i \in \{0, 1\}$
+
+Therefore the ILP correctly models the maximum directed cut problem
+
+
+\subsection*{LP relaxation}
+
+The constraint $\forall i \in V, x_i \in \{0, 1\}$ is changed to $\forall i \in V, x_i \in [0, 1]$.
+
+\textit{Claim.} 
+The integrality gap for the complete graph graph converges to 2, as $|V| \rightarrow \infty$.
+
+\textit{Proof.}
+For the complete graph, assigning $x_i = 0.5, i \in V$ and assigning $z_{i,j} = 0.5, (i, j) \in E$ for the LP relaxed problem yields $\frac{|E|}{2}$. 
+
+However, the best ILP solution is assigning half of the nodes to $U$, which converges to $\frac{|E|}{4}$ for the complete graph, as $|V| \rightarrow \infty$.
+
+Thus the integrality gap equals 2.
+
+\subsection*{Rounding scheme}
+
+The proposed rounding scheme returns a valid directed cut by construction, since every vertex is either assigned to $U$ or not $U$ (i.e. $W$). 
+
+Let $(i, j) \in E$ be arbitrary.
+
+$
+\Pr[(i, j) \textit{ in cut}] = 
+\Pr[i \in U, j \notin U]
+$
+
+$ =
+\left(\frac{1}{4} + \frac{x_i}{2}\right) \cdot \left[1 - \left(\frac{1}{4} + \frac{x_j}{2}\right)\right] =
+\left(\frac{1}{4} + \frac{x_i}{2}\right) \cdot \left(\frac{3}{4} - \frac{x_j}{2}\right) =
+\left(\frac{1}{4} + \frac{x_i}{2}\right) \cdot \left(\frac{1}{4} + \frac{1 - x_j}{2}\right) 
+$
+
+$ \geq
+\left(\frac{1}{4} + \frac{z_{ij}}{2}\right) \cdot \left(\frac{1}{4} + \frac{z_{ij}}{2}\right) = 
+\frac{1}{16} + \frac{z_{ij}}{4} + \frac{z_{ij}^2}{4} = 
+\frac{1}{16} - \frac{z_{ij}}{4} + \frac{z_{ij}^2}{4} + \frac{z_{ij}}{2} =
+\left(\frac{1}{4} - \frac{z_{ij}}{2}\right)^2  + \frac{z_{ij}}{2} 
+$
+
+$\geq
+\frac{z_{ij}}{2} 
+$
+
+With this probability the expected value of number of edges going from U to W can be calculated.
+
+$
+\EV[\textit{Total number of edges going from U to W}] = 
+\sum\limits_{(i, j) \in E}  1\cdot Pr[(i, j) \textit{ in cut}]
+$
+
+$ \geq
+\sum\limits_{(i, j) \in E} \frac{z_{ij}}{2} = 
+\frac{1}{2} \cdot \underbrace{\sum\limits_{(i, j) \in E} z_{ij}}_{OPT_{LP}} \geq
+\frac{1}{2} \cdot OPT
+$
+
+Thus, the proposed scheme yields a $2$-approximation. Therefore, the integrality gap is at most 2.
+
+\pagebreak 

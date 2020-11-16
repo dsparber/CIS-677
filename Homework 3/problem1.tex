@@ -1,0 +1,63 @@
+\section*{Problem 1}
+
+Let $S$ denote the stream.
+Let $a_i$ be the number of occurrences of $(A,i)$ in the stream $S$. Let $b_i$ be the number of occurrences of $(B, i)$.
+
+Consider the following polynomials:
+
+$Q_A(x) = \sum\limits_{i = 1}^n a_ix^i$
+
+$Q_B(x) = \sum\limits_{i = 1}^n b_ix^i$
+
+$Q_C(x) = Q_A(x) - Q_B(x) = \sum\limits_{i = 1}^n \underbrace{(a_i - b_i)}_{c_i} x^i = \sum\limits_{i = 1}^n c_ix^i$
+
+By definition of $a_i$, we have $Q_A(x) = \sum\limits_{(A,i) \in S} 1 \cdot x^i$. Similarly, $Q_B(x) =  \sum\limits_{(B,i) \in S} 1 \cdot x^i.$
+
+Thus, given $x$ we can evaluate the polynomials as we go over the stream $S$.
+
+
+\underline{Algorithm}
+
+Let $p$ be a the smallest prime number greater $n^2$ and greater $100n$. 
+
+First, draw a random number $r \in [2...p-1]$.
+
+As we move along the stream, evaluate $Q_A(r)$ and $Q_B(r)$ over the field $\mathbb{F}_p$.
+
+Calculate $Q_C(r) = Q_A(r) - Q_B(r)$. Return $A = B$ if $Q_C(r) = 0$, otherwise $A \neq B$.
+
+\underline{Space complexity}
+
+The algorithm only needs to store $p$, $r$ and the current evaluation of $Q_A(r)$ and $Q_B(r)$ over $\mathbb{F}_p$.
+
+Since, $p \in \bigO(n^2)$, $p$ can be stored with $\bigO(\log n^2) = \bigO(\log n)$ bits. Since $r < p$ and $Q_A(r)$, $Q_B(r)$ are evaluated over $\mathbb{F}_p$, all values can also saved with $\bigO(\log n)$ bits.
+
+\underline{Correctness}
+
+Let $S$ be an arbitrary stream. Let $A$ and $B$ be the multi-sets implied by $S$.
+
+\begin{itemize}
+    \item Case $A = B$
+    
+    By definition of the polynomials, we get $Q_A = Q_B$. Therefore, $Q_C = 0$. Thus, the algorithm always yields $A = B$.
+    
+    \item Case $A \neq B$
+    
+    From number theory we know, $\forall x \in [2...p-1]$, for any $i, j \in [1..n]$, $i \neq j \Rightarrow x^i \neq x^j$ over $\mathbb{F}_p$, since $p > n$.
+    
+    Since $A \neq B$, there exists at least one $c_i \neq 0$. 
+    Because $p > 100n$ and $c_i \leq 100n$, $c_i$ is also non zero over $\mathbb{F}_p$.
+    Furthermore, if there are multiple non zero $c_i$, they do not cancel out, since $x^i \neq x^j$ for $i \neq j$. Therefore, the polynomial $Q_C$ is non zero. 
+    
+    Because $Q_C$ is non zero, we can apply the Schwartz-Zippel Lemma and get:
+    
+    $\Pr[Q_C(r) = 0] =
+    \Pr[Q_C(r) = 0 ~|~ Q_C \neq 0] \leq 
+    \frac{d}{|[2...p-1]|} = \frac{n}{n^2} = \frac{1}{n}$.
+    
+    Thus, the algorithm returns the correct answer with probability at least $1 - 1/n$.
+    
+\end{itemize}
+
+
+\pagebreak

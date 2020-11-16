@@ -16,9 +16,9 @@ Let $L \in$ BPP be arbitrary.
 By definition of BPP: There exists a poly-time algorithm A which on any input $x$ has the following behavior:
 
 \begin{itemize}
-    \item If $x \in L$, then $\operatorname{Pr}[\textit{A accepts } x] \geq \frac{3}{4}$
+    \item If $x \in L$, then $\operatorname{Pr}[\textit{A accepts } x] > \frac{3}{4}$
     
-    \item If $x \notin L$, then $\operatorname{Pr}[\textit{A rejects } x] \geq \frac{3}{4}$
+    \item If $x \notin L$, then $\operatorname{Pr}[\textit{A rejects } x] > \frac{3}{4}$
 \end{itemize}
 
 A is also a valid algorithm for C, since A fulfills the definition of C:
@@ -49,16 +49,16 @@ Let B be an algorithm defined as follows:
     \item Repeat algorithm A $k$ times. Accept, if at least $l = \frac{k}{2} + \frac{k}{2 \operatorname{poly}(n)}$ of executions of A accepted, otherwise reject.
 \end{itemize}
 
-Where $k = 16\operatorname{poly}(n)\operatorname{log}(2)$
+Where $k = 32(\operatorname{poly}(n))^2\operatorname{log}(2)$
 
 \underline{Claim}
 
 B is a valid algorithm for BPP, i.e. B has the following properties:
 
 \begin{itemize}
-    \item If $x \in L$, then $\operatorname{Pr}[\textit{B accepts } x] \geq \frac{3}{4}$
+    \item If $x \in L$, then $\operatorname{Pr}[\textit{B accepts } x] > \frac{3}{4}$
     
-    \item If $x \notin L$, then $\operatorname{Pr}[\textit{B rejects } x] \geq \frac{3}{4}$
+    \item If $x \notin L$, then $\operatorname{Pr}[\textit{B rejects } x] > \frac{3}{4}$
 \end{itemize}
 
 \underline{Proof}
@@ -81,17 +81,17 @@ $X$ consists of independent 0/1 random variables, thus Chernoff bounds with addi
 
 $\operatorname{Pr}[X \leq l]= \operatorname{Pr}\left[X \leq  \frac{k}{2} + \frac{k}{2 \operatorname{poly}(n)}\right]
 = \operatorname{Pr}\left[X \leq  \left(\frac{k}{2} + \frac{k}{\operatorname{poly}(n)}\right) - k\cdot\frac{1}{2\operatorname{poly}(n)}\right]
-\leq e^{-\frac{\frac{1}{2\operatorname{poly}(n)} k}{2}}
+< e^{-\frac{\frac{1}{(2\operatorname{poly}(n))^2} k}{2}}
 $
 
 $=
-e^{-\frac{\frac{1}{2\operatorname{poly}(n)} 16\operatorname{poly}(n)\operatorname{log}(2)}{2}} 
+e^{-\frac{\frac{1}{4 (\operatorname{poly}(n))^2} 32(\operatorname{poly}(n))^2\operatorname{log}(2)}{2}} 
 =
-e^{-\operatorname{log}(8)}
-= \frac{1}{8} \leq \frac{1}{4}$
+e^{-\operatorname{log}(16)}
+= \frac{1}{16} \leq \frac{1}{4}$
 
 $\Rightarrow
-\operatorname{Pr}[\textit{B accepts } x] \geq \frac{3}{4}$ 
+\operatorname{Pr}[\textit{B accepts } x] > \frac{3}{4}$ 
 
 \item Assume $x \notin L$:
 
@@ -110,20 +110,20 @@ Applying Chernoff:
 $\operatorname{Pr}[Y \geq l]
 = \operatorname{Pr}\left[Y \geq \frac{k}{2} + \frac{k}{2 \operatorname{poly}(n)}\right]
 = \operatorname{Pr}\left[Y \geq \frac{k}{2} + k\cdot\frac{1}{2\operatorname{poly}(n)}\right]
-\leq e^{-\frac{\frac{1}{2\operatorname{poly}(n)} k}{4}}$
+< e^{-\frac{\frac{1}{(2\operatorname{poly}(n))^2} k}{4}}$
 
 $=
-e^{-\frac{\frac{1}{2\operatorname{poly}(n)} 16\operatorname{poly}(n)\operatorname{log}(2)}{4}} 
+e^{-\frac{\frac{1}{4(\operatorname{poly}(n))^2} 32(\operatorname{poly}(n))^2\operatorname{log}(2)}{4}} 
 =
 e^{-\operatorname{log}(4)}
 = \frac{1}{4}$
 
 $\Rightarrow
-\operatorname{Pr}[\textit{B rejects } x] \geq \frac{3}{4}$ 
+\operatorname{Pr}[\textit{B rejects } x] > \frac{3}{4}$ 
 
 \end{itemize}
 
-Since A is a polynomial-time algorithm and A is executed $16\operatorname{poly}(n)\operatorname{log}(2)$ times, B is a polynomial-time algorithm.
+Since A is a polynomial-time algorithm and A is executed $32(\operatorname{poly}(n))^2\operatorname{log}(2)$ times, B is a polynomial-time algorithm.
 
 Thus, B is a valid algorithm for BPP.
 

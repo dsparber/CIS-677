@@ -1,0 +1,26 @@
+\section*{Problem 5}
+
+We use the same LP relaxation as described in the lecture. 
+
+Let $j \in [1..n]$ be an arbitrary element.
+
+From the lecture, we know:
+
+$\Pr[j \textit{ is not covered}] \leq \frac{1}{e}$
+
+Instead of repeating $\log n$ times to get a valid solution, we now use a different approach:
+
+Repeat $\log \Delta$ times to get a better probability: 
+
+$
+\Pr[j \textit{ is not covered after } \Delta \textit{ tries}] \leq
+\left(\frac{1}{e}\right)^{\log \Delta} = 
+\frac{1}{\Delta}
+$
+
+
+After that, for every uncovered element, pick the set with the smallest weight (greedy). 
+
+Suppose $OPT = \{S_1,\dots,S_k\}$ is an optimal solution. Every $S_i$ of the solution covers at most $\Delta$ elements. Thus, the cost of picking sets by the greedy step is at most $\Delta$ times worse than the optimal solution.
+
+Therefore, in total the expected cost increases by $\Delta \cdot \frac{1}{\Delta} = 1$ when doing the greedy step. We get a $(\log \Delta)$-approximation.

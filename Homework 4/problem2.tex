@@ -1,0 +1,41 @@
+\section*{Problem 2}
+
+Consider the following high level algorithm:
+
+\begin{itemize}
+    \item If $A = B$: return $N_A = N_B$
+    \item compare($A$, $B$):
+    \begin{itemize}
+        \item If $|A| = 1$: compare $N_A$ and $N_B$ and return result
+        \item Let $A_1$ be the first $\lceil|A|/2\rceil$ bits of the bitstring $A$, $A_2$ the second half. Same for $B_1$ and $B_2$
+        \item If $A_1 \neq B_1$: return compare($A_1$, $B_1$)
+        \item Else: return compare($A_2$, $B_2$)
+    \end{itemize}
+\end{itemize}
+
+The algorithm is interactive and compares $A$ and $B$ in a recursive way. Since the algorithm always halfs the length of the bitstring, the recursion depth is $\bigO(\log n)$. Additionally, the recursion does not branch, since the recursion is only called on one of the two halfs. Therefore, there are at most $\bigO(\log n)$ rounds.
+
+First, consider the algorithm on a single machine. If $A = B$ the algorithm returns the correct result. Otherwise, without loss of generality, let $N_A > N_B$. The base case with just one bit to compare returns the correct result. In the other cases, we check where $A$ and $B$ differ. If they differ in the first half, i.e. $N_{A_1} > N_{B_1}$, $N_A > N_B$ since the first half contains the higher order bits. If the first half is the same, they must differ in the second half, i.e. $N_{A_2} > N_{B_2}$. $N_A > N_B$ follows directly. Thus, the algorithm is correct on a single machine.
+
+Now consider the distributed case. We show that the algorithm still works if $A$ and $B$ are not on the same machine.
+Alice and Bob both run the algorithm on their own and cooperate to perform the (in)equality tests. For the base case they deterministically compare one bit. Thus, the algorithm succeeds if every (in)equality test succeeds.
+
+We use the following algorithm to compare two bitstrings $A$ and $B$:
+
+\begin{itemize}
+    \item Alice chooses a random prime number $p \in [2..n^\textbf{5}]$
+    \item Alice computes $N_A$ mod $p$ and sends the the result and $p$ to Bob
+    \item Bob computes $N_B$ mod $p$ and sends one bit to Alice indicating whether $N_A$ mod $p = N_B$ mod $p$
+\end{itemize}
+
+The equality check needs to send $\bigO(\log n)$ bits.
+By performing an analysis analog to the lecture, we can bound the failure probability by $1/n^3$:
+
+$\Pr[\textit{failure}] = \frac{\textit{Prime divisors}}{\textit{Primes in }[2..n^5]} \leq \frac{n}{\frac{n^5}{\log n^5}} \leq \frac{n}{n^4} = \frac{1}{n^3}$
+
+In total there are at most $\log n$ equality tests. By union bound, the probability of any equality test failing is bounded by $\frac{\log n}{n^3} \leq \frac{1}{n^2}$. Thus, the correct result is returned with probability at least $1 - 1/n^2$. 
+
+Furthermore, the communication is bounded by $\bigO(\log n)$ rounds times $\bigO(\log n)$ bits per rounds. Therefore, the total communication is bound by $\bigO(\log^2 n)$.
+
+\pagebreak
+
